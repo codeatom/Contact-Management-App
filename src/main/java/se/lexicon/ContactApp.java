@@ -13,7 +13,12 @@ public class ContactApp {
     // Stores email addresses for uniqueness checks
     private final List<String> emails = new ArrayList<>();
 
+    private final ContactFileHandler fileHandler = new ContactFileHandler();
+
+
     public void run() {
+        emails.addAll(contacts.keySet());
+
         boolean running = true;
 
         while (running) {
@@ -39,6 +44,7 @@ public class ContactApp {
                 case "6" -> search();
                 case "7" -> displayContactsSortedByName();
                 case "0" -> {
+                    fileHandler.saveContacts(contacts);
                     running = false;
                     System.out.println("Goodbye!");
                 }
