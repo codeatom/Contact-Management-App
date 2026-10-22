@@ -118,7 +118,17 @@ public class ContactApp {
 
 
     public void delete() {
+        System.out.print("Enter email of the contact to delete: ");
+        String email = scanner.nextLine().trim().toLowerCase();
 
+        Person removed = contacts.remove(email);
+
+        if (removed == null) {
+            System.out.println("Contact not found.");
+        } else {
+            emails.remove(email);
+            System.out.println("Contact deleted successfully.");
+        }
     }
 
 
