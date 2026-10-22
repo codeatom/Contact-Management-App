@@ -1,11 +1,7 @@
 package se.lexicon;
 
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class ContactApp {
 
@@ -28,6 +24,7 @@ public class ContactApp {
             System.out.println("4. Update contact");
             System.out.println("5. Delete contact");
             System.out.println("6. Search contacts");
+            System.out.println("7. Display contacts sorted by name");
             System.out.println("0. Exit");
             System.out.print("Choose an option: ");
 
@@ -40,6 +37,7 @@ public class ContactApp {
                 case "4" -> update();
                 case "5" -> delete();
                 case "6" -> search();
+                case "7" -> displayContactsSortedByName();
                 case "0" -> {
                     running = false;
                     System.out.println("Goodbye!");
@@ -251,4 +249,37 @@ public class ContactApp {
         return value.isEmpty() ? currentValue : value;
     }
 
+
+    public void displayContactsSortedByName() {
+        if (contacts.isEmpty()) {
+            System.out.println("No contacts available.");
+            return;
+        }
+
+        List<Person> sortedContacts = new ArrayList<>(contacts.values());
+
+        Collections.sort(sortedContacts, new PersonComparator());
+
+        System.out.println("\n--- Contacts Sorted by Name ---");
+
+        for (Person person : sortedContacts) {
+            System.out.println("--------------------");
+            System.out.println(person);
+        }
+    }
+
+    private static class PersonComparator implements Comparator<Person> {   // anonymous inner class
+        @Override
+        public int compare(Person p1, Person p2) {
+            int result = p1.getFirstName()
+                    .compareToIgnoreCase(p2.getFirstName());
+
+            if (result == 0) {
+                return p1.getLastName()
+                        .compareToIgnoreCase(p2.getLastName());
+            }
+
+            return result;
+        }
+    }
 }
