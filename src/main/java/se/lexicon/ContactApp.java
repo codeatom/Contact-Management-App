@@ -113,7 +113,82 @@ public class ContactApp {
 
 
     public void update() {
+        System.out.print("Enter the current email of the contact: ");
+        String oldEmail = scanner.nextLine().trim().toLowerCase();
 
+        Person existing = contacts.get(oldEmail);
+
+        if (existing == null) {
+            System.out.println("Contact not found.");
+            return;
+        }
+
+        String existingFirstName = existing.getFirstName();
+        String existingLastName = existing.getLastName();
+        String existingPhoneNumber = existing.getPhoneNumber();
+        String existingAddress = existing.getAddress();
+        String existingEmail = existing.getEmail();
+
+
+        // Ask for the new email first
+        System.out.print("Enter the new email ["
+                + existingEmail + "]: ");
+
+        String newEmail = scanner.nextLine().trim().toLowerCase();
+
+        // Keep the current email if the user presses Enter
+        if (newEmail.isEmpty()) {
+            newEmail = oldEmail;
+        }
+
+        // Check availability before asking for other fields
+        if (!newEmail.equals(oldEmail) && emails.contains(newEmail)) {
+            System.out.println(
+                    "Error: Email already belongs to another contact.");
+            return;
+        }
+
+        // Ask for the remaining fields only after email validation
+        System.out.println("Press Enter to keep the existing value.");
+
+        String firstName = readOptional(
+                "First name [" + existingFirstName + "]: ",
+                existing.getFirstName());
+
+        String lastName = readOptional(
+                "Last name [" + existingLastName + "]: ",
+                existing.getLastName());
+
+        String phoneNumber = readOptional(
+                "Phone number [" + existingPhoneNumber + "]: ",
+                existing.getPhoneNumber());
+
+        String address = readOptional(
+                "Address [" + existingAddress + "]: ",
+                existing.getAddress());
+
+        // Because a Person is immutable we build a new Person and remove the old person
+        Person updated = new Person.Builder()
+                .firstName(firstName)
+                .lastName(lastName)
+                .email(newEmail)
+                .phoneNumber(phoneNumber)
+                .address(address)
+                .build();
+
+        // Update both collections if the email has changed
+        if (!oldEmail.equals(newEmail)) {
+            contacts.remove(oldEmail);
+            emails.remove(oldEmail);
+        }
+
+        contacts.put(newEmail, updated);
+
+        if (!emails.contains(newEmail)) {
+            emails.add(newEmail);
+        }
+
+        System.out.println("Contact updated successfully.");
     }
 
 
@@ -166,6 +241,14 @@ public class ContactApp {
 
             System.out.println("This field cannot be empty.");
         }
+    }
+
+
+    private String readOptional(String prompt, String currentValue) {
+        System.out.print(prompt);
+        String value = scanner.nextLine().trim();
+
+        return value.isEmpty() ? currentValue : value;
     }
 
 }
