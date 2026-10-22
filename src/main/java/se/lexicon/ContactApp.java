@@ -84,12 +84,31 @@ public class ContactApp {
 
 
     public void read() {
+        System.out.print("Enter email to find: ");
+        String email = scanner.nextLine().trim().toLowerCase();
 
+        Person person = contacts.get(email);
+
+        if (person == null) {
+            System.out.println("Contact not found.");
+        } else {
+            System.out.println("\n" + person);
+        }
     }
 
 
     public void readAll() {
+        if (contacts.isEmpty()) {
+            System.out.println("No contacts available.");
+            return;
+        }
 
+        System.out.println("\n--- All Contacts ---");
+
+        for (Person person : contacts.values()) {
+            System.out.println("--------------------");
+            System.out.println(person);
+        }
     }
 
 
