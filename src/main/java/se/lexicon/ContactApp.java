@@ -17,6 +17,7 @@ public class ContactApp {
 
 
     public void run() {
+        fileHandler.loadContacts(contacts);
         emails.addAll(contacts.keySet());
 
         boolean running = true;
@@ -273,6 +274,7 @@ public class ContactApp {
             System.out.println(person);
         }
     }
+
 
     private static class PersonComparator implements Comparator<Person> {   // anonymous inner class
         @Override
