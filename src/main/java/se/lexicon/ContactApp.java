@@ -53,7 +53,33 @@ public class ContactApp {
 
 
     public void create() {
+        System.out.println("\n--- Create Contact ---");
 
+        String firstName = readRequired("First name: ");
+        String lastName = readRequired("Last name: ");
+        String email = readRequired("Email: ").toLowerCase();
+
+        // Check email uniqueness before creating the Person
+        if (emails.contains(email)) {
+            System.out.println("Error: Email already exists.");
+            return;
+        }
+
+        String phoneNumber = readRequired("Phone number: ");
+        String address = readRequired("Address: ");
+
+        Person person = new Person.Builder()
+                .firstName(firstName)
+                .lastName(lastName)
+                .email(email)
+                .phoneNumber(phoneNumber)
+                .address(address)
+                .build();
+
+        contacts.put(email, person);
+        emails.add(email);
+
+        System.out.println("Contact created successfully.");
     }
 
 
@@ -79,6 +105,20 @@ public class ContactApp {
 
     public void search() {
 
+    }
+
+
+    private String readRequired(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String value = scanner.nextLine().trim();
+
+            if (!value.isEmpty()) {
+                return value;
+            }
+
+            System.out.println("This field cannot be empty.");
+        }
     }
 
 }
