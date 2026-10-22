@@ -123,7 +123,25 @@ public class ContactApp {
 
 
     public void search() {
+        System.out.print("Enter a first or last name to search: ");
+        String query = scanner.nextLine().trim().toLowerCase();
 
+        boolean found = false;
+
+        for (Person person : contacts.values()) {
+            String firstName = person.getFirstName().toLowerCase();
+            String lastName = person.getLastName().toLowerCase();
+
+            if (firstName.contains(query) || lastName.contains(query)) {
+                System.out.println("--------------------");
+                System.out.println(person);
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("No matching contacts found.");
+        }
     }
 
 
