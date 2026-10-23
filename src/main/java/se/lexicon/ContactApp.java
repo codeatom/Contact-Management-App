@@ -5,7 +5,8 @@ import java.util.*;
 
 public class ContactApp {
 
-    private final Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner;
+    private final ContactFileHandler fileHandler;
 
     // Stores contacts using email as the key
     private final Map<String, Person> contacts = new LinkedHashMap<>();
@@ -13,7 +14,19 @@ public class ContactApp {
     // Stores email addresses for uniqueness checks
     private final List<String> emails = new ArrayList<>();
 
-    private final ContactFileHandler fileHandler = new ContactFileHandler();
+
+    public ContactApp() {
+        this(new Scanner(System.in), new ContactFileHandler());
+    }
+
+    ContactApp(Scanner scanner, ContactFileHandler fileHandler) {
+        this.scanner = scanner;
+        this.fileHandler = fileHandler;
+    }
+
+    public Map<String, Person> getContacts() {
+        return contacts;
+    }
 
 
     public void run() {

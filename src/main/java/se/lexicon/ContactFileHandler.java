@@ -12,7 +12,17 @@ import java.util.stream.Stream;
 
 public class ContactFileHandler {
 
-    private static final Path FILE_PATH = Path.of("contacts.txt");
+    //private static final Path FILE_PATH = Path.of("contacts.txt");
+
+    private final Path filePath;
+
+    public ContactFileHandler() {
+        this(Path.of("contacts.txt"));
+    }
+
+    public ContactFileHandler(Path filePath) {
+        this.filePath = filePath;
+    }
 
     // Export all contacts to a text file
     public void saveContacts(Map<String, Person> contacts) {
@@ -31,7 +41,7 @@ public class ContactFileHandler {
         }
 
         try {
-            Files.write(FILE_PATH, lines, StandardCharsets.UTF_8);
+            Files.write(filePath, lines, StandardCharsets.UTF_8);
             System.out.println("Contacts saved successfully.");
         } catch (IOException e) {
             System.out.println("Error saving contacts: " + e.getMessage());
@@ -45,7 +55,8 @@ public class ContactFileHandler {
             return "";
         }
 
-        return value.replace("\\", "\\\\")
+        return value
+                .replace("\\", "\\\\")
                 .replace(";", "\\;")
                 .replace("\n", "\\n")
                 .replace("\r", "\\r");
@@ -54,18 +65,19 @@ public class ContactFileHandler {
 
     // Import contacts from a text file
     public void loadContacts(Map<String, Person> contacts) {
-        if (!Files.exists(FILE_PATH)) {
+        if (!Files.exists(filePath)) {
             System.out.println("No saved contacts found. Starting fresh.");
             return;
         }
 
         try (Stream<String> lines =
-                     Files.lines(FILE_PATH, StandardCharsets.UTF_8)) {
+                     Files.lines(filePath, StandardCharsets.UTF_8)) {
 
             lines.forEach(line -> {
                 try {
                     List<String> fields = parseLine(line);
 
+                    //The number of fields in Person.java is 5
                     if (fields.size() != 5) {
                         System.out.println("Skipping invalid contact line.");
                         return;
